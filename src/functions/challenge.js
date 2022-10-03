@@ -206,7 +206,19 @@ export const listPaddockManagerIds = () => {
 };
 
 // 1 Arreglo con los ruts de los responsables de los cuarteles, ordenados por nombre
-export const listPaddockManagersByName = () => {};
+export const listPaddockManagersByName = () => {
+  let names = paddockManagers;
+  names.sort(function (a, b) {
+    if (a.name > b.name) {
+      return 1;
+    }
+    if (a.name < b.name) {
+      return -1;
+    }
+    return 0;
+  });
+  return names.map((name) => name.taxNumber);
+};
 
 // 2 Arreglo con los nombres de cada tipo de cultivo, ordenados decrecientemente por la suma TOTAL de la cantidad de hectáreas plantadas de cada uno de ellos.
 export const sortPaddockTypeByTotalArea = () => {};
