@@ -202,7 +202,9 @@ const farms = [
 
 // 0 Arreglo con los ids de los responsables de cada cuartel, ordenados de menor a mayor
 export const listPaddockManagerIds = () => {
-  return paddockManagers.map((paddockManager) => paddockManager.id);
+  return paddockManagers
+    .map((paddockManager) => paddockManager.id)
+    .sort((a, b) => a.id - b.id);
 };
 
 // 1 Arreglo con los ruts de los responsables de los cuarteles, ordenados por nombre
@@ -221,7 +223,9 @@ export const listPaddockManagersByName = () => {
 };
 
 // 2 Arreglo con los nombres de cada tipo de cultivo, ordenados decrecientemente por la suma TOTAL de la cantidad de hectáreas plantadas de cada uno de ellos.
-export const sortPaddockTypeByTotalArea = () => {};
+export const sortPaddockTypeByTotalArea = () => {
+  return paddockType.map((x) => x.name);
+};
 
 // 3 Arreglo con los nombres de los administradores, ordenados decrecientemente por la suma TOTAL de hectáreas que administran.
 export const sortFarmManagerByAdminArea = () => {};
