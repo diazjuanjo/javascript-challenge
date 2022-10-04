@@ -202,33 +202,82 @@ const farms = [
 
 // 0 Arreglo con los ids de los responsables de cada cuartel, ordenados de menor a mayor
 export const listPaddockManagerIds = () => {
-  return paddockManagers
-    .map((paddockManager) => paddockManager.id)
-    .sort((a, b) => a.id - b.id);
+  return paddockManagers.map((item) => item.id).sort();
 };
 
 // 1 Arreglo con los ruts de los responsables de los cuarteles, ordenados por nombre
 export const listPaddockManagersByName = () => {
-  let names = paddockManagers;
-  names.sort(function (a, b) {
-    if (a.name > b.name) {
-      return 1;
-    }
-    if (a.name < b.name) {
-      return -1;
-    }
-    return 0;
-  });
-  return names.map((name) => name.taxNumber);
+  return paddockManagers
+    .sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      return 0;
+    })
+    .map((item) => item.taxNumber);
 };
 
 // 2 Arreglo con los nombres de cada tipo de cultivo, ordenados decrecientemente por la suma TOTAL de la cantidad de hectáreas plantadas de cada uno de ellos.
 export const sortPaddockTypeByTotalArea = () => {
-  return paddockType.map((x) => x.name);
+  return paddockType
+    .map((item) => {
+      return paddocks
+        .filter((element) => element.paddockTypeId === item.id)
+        .reduce((acc, element) => {
+          acc = acc + element.area;
+          return acc;
+        }, 0);
+    })
+    .map((item, index) => ({ id: index, sum: item }))
+    .sort((a, b) => b.sum - a.sum)
+    .map((item) => paddockType[item.id].name);
 };
 
 // 3 Arreglo con los nombres de los administradores, ordenados decrecientemente por la suma TOTAL de hectáreas que administran.
-export const sortFarmManagerByAdminArea = () => {};
+export const sortFarmManagerByAdminArea = () => {
+  return paddockManagers
+    .map((item) => {
+      return paddocks
+        .filter((element) => element.paddockManagerId === item.id)
+        .reduce((acc, element) => {
+          acc = acc + element.area;
+          return acc;
+        }, 0);
+    })
+    .map((item, index) => ({ id: index, sum: item }))
+    .sort((a, b) => b.sum - a.sum)
+    .map((item) => paddockManagers[item.id].name);
+};
+
+let x = farms.map((item) => {
+  return paddocks
+    .filter((_item) => _item.farmId === item.id)
+    .map((item) =>
+      paddockManagers.find((_item) => _item.id === item.paddockManagerId)
+    )
+    .sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      return 0;
+    });
+});
+
+const y = x.map((item) => item.map((element) => element.taxNumber));
+
+const u = y.map((item) => {
+  return [...new Set(item)];
+});
+
+const f = u.map((item, index) => item);
+
+console.log("ejerc 4", f);
 
 // 4 Objeto en que las claves sean los nombres de los campos y los valores un arreglo con los ruts de sus administradores ordenados alfabéticamente por nombre.
 export const farmManagerNames = () => {};
