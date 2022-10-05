@@ -252,38 +252,40 @@ export const sortFarmManagerByAdminArea = () => {
     .map((item) => paddockManagers[item.id].name);
 };
 
-let x = farms.map((item) => {
-  return paddocks
-    .filter((_item) => _item.farmId === item.id)
-    .map((item) =>
-      paddockManagers.find((_item) => _item.id === item.paddockManagerId)
-    )
-    .sort((a, b) => {
-      if (a.name > b.name) {
-        return 1;
-      }
-      if (a.name < b.name) {
-        return -1;
-      }
-      return 0;
-    });
-});
-
-const y = x.map((item) => item.map((element) => element.taxNumber));
-
-const u = y.map((item) => {
-  return [...new Set(item)];
-});
-
-const f = u.map((item, index) => item);
-
-console.log("ejerc 4", f);
 
 // 4 Objeto en que las claves sean los nombres de los campos y los valores un arreglo con los ruts de sus administradores ordenados alfabéticamente por nombre.
-export const farmManagerNames = () => {};
+export const farmManagerNames = () => {
+  return farms.map((item) => {
+    return paddocks
+      .filter((_item) => _item.farmId === item.id)
+      .map((item) =>
+        paddockManagers.find((_item) => _item.id === item.paddockManagerId)
+      )
+      .sort((a, b) => {
+        if (a.name > b.name) {
+          return 1;
+        }
+        if (a.name < b.name) {
+          return -1;
+        }
+        return 0;
+      }).map((element) => element.taxNumber);
+  }).map((item) => {
+    return [...new Set(item)];
+  });
+};
 
 // 5 Arreglo ordenado decrecientemente con los m2 totales de cada campo que tengan más de 2 hectáreas en Paltos
-export const biggestAvocadoFarms = () => {};
+export const biggestAvocadoFarms = () => {
+  return paddocks.filter((item)=>(item.paddockTypeId === 1)).map((item) => {
+    return paddocks
+      .filter((element) => element.paddockManagerId === item.id)
+      .reduce((acc, element) => {
+        acc = acc + element.area;
+        return acc;
+      }, 0);
+  })
+};
 
 // 6 Arreglo con nombres de los administradores de la FORESTAL Y AGRÍCOLA LO ENCINA, ordenados por nombre, que trabajen más de 1000 m2 de Cerezas
 export const biggestCherriesManagers = () => {};
